@@ -45,7 +45,7 @@ public class SteeringWheel : MonoBehaviour
 
     void FixedUpdate()
     {
-        grabbed = Input.GetMouseButton(0);
+        grabbed =  Input.GetMouseButton(0);
 
         if (grabbed)
         {
