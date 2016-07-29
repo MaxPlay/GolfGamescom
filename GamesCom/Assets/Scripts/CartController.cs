@@ -12,6 +12,8 @@ namespace GamesCom
 
         [SerializeField]
         private SteeringWheel wheel;
+        [SerializeField]
+        private CarInteractor interactor;
 
         [SerializeField]
         private Pedal brake;
@@ -29,7 +31,8 @@ namespace GamesCom
         {
             // pass the input to the car!
             float h = wheel.GetRotation();//CrossPlatformInputManager.GetAxis("Horizontal");
-            float v = CrossPlatformInputManager.GetAxis("Vertical");
+            float v = interactor.TouchInput;//CrossPlatformInputManager.GetAxis("Vertical");
+            Debug.Log(interactor.TouchInput);
 
             if (v > 0)
                 throttle.PressedValue = v;

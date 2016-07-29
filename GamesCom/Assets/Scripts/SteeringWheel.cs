@@ -21,6 +21,14 @@ public class SteeringWheel : MonoBehaviour
     private LayerMask layermask;
     private float baseRotation;
 
+    [SerializeField]
+    private CarInteractor interactor;
+
+    [SerializeField]
+    private Material regular;
+    [SerializeField]
+    private Material outlined;
+
     void Start()
     {
         model = transform.GetChild(0);
@@ -34,7 +42,7 @@ public class SteeringWheel : MonoBehaviour
 
         if (Math.Abs(currentRotation) > limitRotation)
         {
-                currentRotation = limitRotation * Mathf.Sign(currentRotation);
+            currentRotation = limitRotation * Mathf.Sign(currentRotation);
         }
 
         //Apply the rotation to the model
@@ -45,35 +53,17 @@ public class SteeringWheel : MonoBehaviour
 
     void FixedUpdate()
     {
-        grabbed =  Input.GetMouseButton(0);
+        grabbed = interactor.isActiveAndEnabled ? interactor.Grabbed : Input.GetMouseButton(0);
 
         if (grabbed)
         {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 10, layermask.value))
+            if (interactor.isActiveAndEnabled)
             {
-                Vector3 collision = hit.point;
-                Vector3 center = transform.position + rotationPoint;
-
-                //Get Initial angle to get the relative angle between the original grab-point and the current grab point.
-                if (Input.GetMouseButtonDown(0))
-                {
-                    baseRotation = Vector3.Angle(center - collision, transform.up);
-                    Vector3 baseCross = Vector3.Cross(center - collision, transform.up);
-                    if (baseCross.y > 0)
-                        baseRotation = -baseRotation;
-                }
-
-                //Get angle of the grab-location.
-                currentRotation = Vector3.Angle(center - collision, transform.up);
-                Vector3 cross = Vector3.Cross(center - collision, transform.up);
-                if (cross.y > 0)
-                {
-                    currentRotation = -currentRotation;
-                }
-
-                currentRotation -= baseRotation;
+                VRControl();
+            }
+            else
+            {
+                MouseControl();
             }
         }
         else
@@ -85,6 +75,94 @@ public class SteeringWheel : MonoBehaviour
             }
             else
                 currentRotation = 0;
+        }
+
+        ManageOutline();
+    }
+
+    private void ManageOutline()
+    {
+        if (interactor.isActiveAndEnabled)
+        {
+            model.GetComponent<Renderer>().materials = new Material[] { interactor.CollidesWithSteeringWheel ? outlined : regular };
+        }
+        else
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit, 10, layermask.value))
+            {
+                model.GetComponent<Renderer>().materials = new Material[] { outlined };
+            }
+            else
+                model.GetComponent<Renderer>().materials = new Material[] { regular };
+        }
+    }
+
+    private void VRControl()
+    {
+        if (interactor.CollidesWithSteeringWheel)
+        {
+            Vector3 collision = interactor.GrabbingPoint;
+            Vector3 center = transform.position + rotationPoint;
+
+            //Get Initial angle to get the relative angle between the original grab-point and the current grab point.
+            if (interactor.SuddenlyGrabbed)
+            {
+                baseRotation = Vector3.Angle(center - collision, transform.up);
+                Vector3 baseCross = Vector3.Cross(center - collision, transform.up);
+                if (baseCross.y > 0)
+                    baseRotation = -baseRotation;
+            }
+
+            //Get angle of the grab-location.
+            currentRotation = Vector3.Angle(center - collision, transform.up);
+            Vector3 cross = Vector3.Cross(center - collision, transform.up);
+            if (cross.y > 0)
+            {
+                currentRotation = -currentRotation;
+            }
+
+            currentRotation -= baseRotation;
+        }
+        else
+        {
+            if (Math.Abs(currentRotation) > 0.0001f)
+            {
+                currentRotation *= 0.9f;
+            }
+            else
+                currentRotation = 0;
+        }
+    }
+
+    private void MouseControl()
+    {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, 10, layermask.value))
+        {
+            Vector3 collision = hit.point;
+            Vector3 center = transform.position + rotationPoint;
+
+            //Get Initial angle to get the relative angle between the original grab-point and the current grab point.
+            if (Input.GetMouseButtonDown(0))
+            {
+                baseRotation = Vector3.Angle(center - collision, transform.up);
+                Vector3 baseCross = Vector3.Cross(center - collision, transform.up);
+                if (baseCross.y > 0)
+                    baseRotation = -baseRotation;
+            }
+
+            //Get angle of the grab-location.
+            currentRotation = Vector3.Angle(center - collision, transform.up);
+            Vector3 cross = Vector3.Cross(center - collision, transform.up);
+            if (cross.y > 0)
+            {
+                currentRotation = -currentRotation;
+            }
+
+            currentRotation -= baseRotation;
         }
     }
 
