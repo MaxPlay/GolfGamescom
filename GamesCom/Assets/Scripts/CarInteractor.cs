@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
+using System.Linq;
 
 public class CarInteractor : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class CarInteractor : MonoBehaviour
     ControllerExtension rightControllerExtension;
 
     SteamVR_Controller.Device rightController { get { return SteamVR_Controller.Input((int)rightTrackedObject.index); } }
-
+    
     void FixedUpdate()
     {
         if (rightController == null)

@@ -439,8 +439,8 @@ public static class SteamVR_Utils
 		var oldOrthographic = camera.orthographic;
 		var oldFieldOfView = camera.fieldOfView;
 		var oldAspect = camera.aspect;
-		var oldstereoTargetEye = camera.stereoTargetEye;
-		camera.stereoTargetEye = StereoTargetEyeMask.None;
+		//var oldstereoTargetEye = camera.stereoTargetEye;
+		//camera.stereoTargetEye = StereoTargetEyeMask.None;
 		camera.fieldOfView = 60.0f;
 		camera.orthographic = false;
 		camera.targetTexture = targetPreviewTexture;
@@ -475,7 +475,7 @@ public static class SteamVR_Utils
 		camera.orthographic = false;
 		camera.targetTexture = targetTexture;
 		camera.aspect = oldAspect;
-		camera.stereoTargetEye = StereoTargetEyeMask.None;
+		//camera.stereoTargetEye = StereoTargetEyeMask.None;
 
 		// Render sections of a sphere using a rectilinear projection
 		// and resample using a sphereical projection into a single panorama
@@ -607,7 +607,7 @@ public static class SteamVR_Utils
 			camera.orthographic = oldOrthographic;
 			camera.fieldOfView = oldFieldOfView;
 			camera.aspect = oldAspect;
-			camera.stereoTargetEye = oldstereoTargetEye;
+			//camera.stereoTargetEye = oldstereoTargetEye;
 
 			target.transform.localPosition = oldPosition;
 			target.transform.localRotation = oldRotation;

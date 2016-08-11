@@ -171,7 +171,7 @@ public class SteamVR_PlayArea : MonoBehaviour
 		renderer.reflectionProbeUsage = UnityEngine.Rendering.ReflectionProbeUsage.Off;
 		renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 		renderer.receiveShadows = false;
-		renderer.lightProbeUsage = LightProbeUsage.Off;
+		//renderer.lightProbeUsage = LightProbeUsage.Off;
 	}
 
 #if UNITY_EDITOR

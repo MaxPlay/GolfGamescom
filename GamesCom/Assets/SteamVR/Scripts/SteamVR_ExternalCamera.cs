@@ -148,7 +148,7 @@ public class SteamVR_ExternalCamera : MonoBehaviour
 		clipRenderer.material = clipMaterial;
 		clipRenderer.shadowCastingMode = ShadowCastingMode.Off;
 		clipRenderer.receiveShadows = false;
-		clipRenderer.lightProbeUsage = LightProbeUsage.Off;
+		//clipRenderer.lightProbeUsage = LightProbeUsage.Off;
 		clipRenderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
 
 		var clipTransform = clipQuad.transform;
